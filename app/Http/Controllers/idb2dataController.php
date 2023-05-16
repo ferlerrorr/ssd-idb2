@@ -18,8 +18,6 @@ class idb2dataController extends Controller
         $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT STSHRT, STADD1, STADD2 ,STADD3 , STCITY , STZIP , STPHON FROM MM770QAL.TBLSTR');
 
 
-
-
         foreach ($qry as $item) {
             // * $data is a Collection of ApiResources merged together per Page.
             $item->stshrt = rtrim($item->stshrt);
