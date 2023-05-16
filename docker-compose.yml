@@ -7,6 +7,7 @@ services:
             args:
                 WWWGROUP: "${WWWGROUP}"
         image: sail-8.2/app
+        restart: always
         extra_hosts:
             - "host.docker.internal:host-gateway"
         ports:
@@ -27,6 +28,7 @@ services:
             - phpmyadmin
     mysql:
         image: "mysql/mysql-server:8.0"
+        restart: always
         ports:
             - "${FORWARD_DB_PORT:-3444}:3444"
         environment:
@@ -51,6 +53,7 @@ services:
             timeout: 5s
 
     phpmyadmin:
+        restart: always
         image: phpmyadmin:latest
         ports:
             - 8180:80
