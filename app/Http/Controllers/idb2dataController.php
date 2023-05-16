@@ -15,11 +15,16 @@ class idb2dataController extends Controller
     public function index()
     {
 
-        $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT STSHRT, STADD3 , STCITY , STZIP , STPHON FROM MM770QAL.TBLSTR');
+        $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT STSHRT, STADD1, STADD2 ,STADD3 , STCITY , STZIP , STPHON FROM MM770QAL.TBLSTR');
+
+
+
 
         foreach ($qry as $item) {
             // * $data is a Collection of ApiResources merged together per Page.
             $item->stshrt = rtrim($item->stshrt);
+            $item->stadd1 = rtrim(mb_convert_encoding($item->stadd1, 'UTF-8', 'UTF-8'));
+            $item->stadd2 = rtrim(mb_convert_encoding($item->stadd2, 'UTF-8', 'UTF-8'));
             $item->stadd3 = rtrim($item->stadd3);
             $item->stcity = rtrim($item->stcity);
             $item->stzip = rtrim($item->stzip);
