@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+  <link rel="stylesheet" href="{{URL::asset('css/search.css');}}" />
+  <link rel="stylesheet" href="{{URL::asset('css/style.css');}}" />
+  <title>Document</title>
+</head>
+<body>
+  <!-- Partial HTML -->
+  <div class="wrap" id="content">
+    <div class="logo-container"><a href="http://localhost:90/"><img class="ssd_logo" src="search\ssd_logo.avif" alt="ssd_logo" style="width: auto; height: auto; left: 32%;
+      position: relative;
+      margin-bottom: 12px;"></a></div>
+    <div class="search">
+      <input type="text" class="searchTerm" id="searchTerm" placeholder="Search" style=" z-index: 1;">
+      <button type="submit" class="searchButton" id="searchButton" onclick="search()">
+        <span class="material-symbols-outlined search">
+          search
+        </span>
+      </button>
+      <ul class="UlDropdown" id="UlDropdown">
+        <!-- <li class="liDropdown"> <h2></h2> </li>
+              <li class="liDropdown"> Apple 2 </li>
+              <li class="liDropdown"> Apple 3 </li>
+              <li class="liDropdown"> Angoor </li>
+              <li class="liDropdown"> Box </li>
+              <li class="liDropdown"> Boy </li> -->
+      </ul>
+      <script type="text/javascript" src="{{ URL::asset('js/search.js') }}"></script>
+    </div>
+  
+    <div class="search-footer" style="position: relative; margin-top: 7rem; left: 22%;">
+      <div class="btn-container">
+  
+        <button class="btn btn-register"><a href="\register\register.html"
+            target="_blank" rel="noopener noreferrer">Register</a></button>
+  
+  
+        <button class="btn btn-get-token"><a href="\apitoken\apitoken.html"
+            target="_blank" rel="noopener noreferrer">Get Api Token</a></button>
+  
+  
+      </div>
+      <p style="color: #999; font-size: smaller; letter-spacing: 1px;">Copyright © 2022 Southstar Drug | Privacy Policy
+      </p>
+    </div>
+    
+  <!-- Partial HTML -->
+</body>
+</html>
+

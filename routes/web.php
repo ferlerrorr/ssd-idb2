@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+View::addExtension('html', 'blade');
+
+
+
 Route::get('/', function () {
-    return view('welcome');
+    return View::make('home/home');
+});
+
+Route::get('/token', function () {
+    return View::make('apitoken/apitoken');
+});
+
+
+Route::get('/register', function () {
+    return View::make('register/register');
+});
+
+
+Route::get('send-mail', function () {
+
+    // $details = [
+    //     'title' => 'Mail from ItSolutionStuff.com',
+    //     'body' => 'This is for testing email using smtp'
+    // ];
+
+    // Mail::to('fjhon.javier@gmail.com')->send(new \App\Mail\MyTestMail($details));
+
+    dd("Email is Sent.");
 });

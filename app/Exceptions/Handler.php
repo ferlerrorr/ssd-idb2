@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Exception;
 
 class Handler extends ExceptionHandler
 {
@@ -29,13 +30,52 @@ class Handler extends ExceptionHandler
 
     /**
      * Register the exception handling callbacks for the application.
+     /**
+     * Register the exception handling callbacks for the application.
      *
      * @return void
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // reportable
+        $this->renderable(function (Exception $exception) {
+
+            if (get_class($exception) == "Illuminate\\Http\\Exceptions\\ThrottleRequestsException") {
+                return response()->json([
+
+                    'message' => $exception->getMessage()
+
+
+                ], 429);
+            } elseif (get_class($exception) == "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException") {
+                return response()->json([
+
+                    'message' => "Resource not found"
+
+
+                ], 404);
+            } elseif (get_class($exception) == "Signifly\\Shopify\\Exceptions\\NotFoundException") {
+                return response()->json([
+                    'message' => "Resource not found"
+                ], 404);
+            } else {
+
+                return response()->json([
+
+                    'type' => get_class($exception),
+                    'message' => $exception->getMessage()
+
+                ], 500);
+            }
+
+
+            //! Error Type Getter
+            // return response()->json([
+            //     'type' => get_class($exception),
+            //     'message' => $exception->getMessage()
+            // ]);
+
+
         });
     }
 }
