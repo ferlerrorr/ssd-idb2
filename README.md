@@ -34,9 +34,10 @@ The application is intended for service with third party partners to use, and be
 
 ## Application Dependency
 
-- **[Laravel 8](https://laravel.com/)**
+- **[Laravel 9](https://laravel.com/)**
 - **[Signifly/Laravel-Shopify.](https://github.com/signifly/laravel-shopify)**
 - **[Shopify Admin Rest Api](https://shopify.dev/api/admin-rest)**
+- **[IBM i Access ODBC](https://ibmi-oss-docs.readthedocs.io/en/latest/odbc/installation.html)**
 - **[JWT(OAUTH0)](https://jwt.io/)**
 
 ## Contributing
