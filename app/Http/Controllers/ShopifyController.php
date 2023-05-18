@@ -86,53 +86,67 @@ class ShopifyController extends Controller
      */
     public function show($pid, Shopify $shopify)
     {
-        //  * Get Product in Shopify w/ Product_id = $pid.
-        $product = $shopify->getProduct($pid);
 
-        //  * Get Product Variant First key[0]. 
-        $variant = $product->variants[0];
+        $headers = apache_request_headers();
+        $beartoken = $headers['Authorization'];
+        $actvtoken = auth()->user()->active_token;
 
-        $images = $product->images;
-
-        $imgs = array_map(function ($o) {
-            return $o["src"];
-        }, $images);
+        if ($beartoken == "Bearer $actvtoken") {
 
 
-        //  * Get Product Variant id. 
-        $variant_id = $variant['id'];
 
-        //  * Get Product Variant Quantity. 
-        $inventory_quantity = $variant['inventory_quantity'];
+            //  * Get Product in Shopify w/ Product_id = $pid.
+            $product = $shopify->getProduct($pid);
 
-        $price = $variant['price'];
+            //  * Get Product Variant First key[0]. 
+            $variant = $product->variants[0];
 
-        $comprice = $variant['compare_at_price'];
+            $images = $product->images;
 
-        $product_name = $product["title"];
+            $imgs = array_map(function ($o) {
+                return $o["src"];
+            }, $images);
 
-        if ($comprice <= $price) {
 
-            $cprice = 0;
+            //  * Get Product Variant id. 
+            $variant_id = $variant['id'];
+
+            //  * Get Product Variant Quantity. 
+            $inventory_quantity = $variant['inventory_quantity'];
+
+            $price = $variant['price'];
+
+            $comprice = $variant['compare_at_price'];
+
+            $product_name = $product["title"];
+
+            if ($comprice <= $price) {
+
+                $cprice = 0;
+            } else {
+
+                $cprice = $comprice;
+            };
+
+
+            // Response Object. 
+            $response = [
+                'images' => $imgs,
+                'product_name' => $product_name,
+                'variant_id' => $variant_id,
+                'inventory_quantity' => $inventory_quantity,
+                'price' => $price,
+                'compare_at_price' => $cprice
+            ];
+
+            //	flush();
+
+            //  * Return Response Object -> Json. 
+            return response()->json($response, 200);
         } else {
-
-            $cprice = $comprice;
-        };
-
-
-        // Response Object. 
-        $response = [
-            'images' => $imgs,
-            'product_name' => $product_name,
-            'variant_id' => $variant_id,
-            'inventory_quantity' => $inventory_quantity,
-            'price' => $price,
-            'compare_at_price' => $cprice
-        ];
-
-        //	flush();
-
-        //  * Return Response Object -> Json. 
-        return response()->json($response, 200);
+            return response()->json([
+                'message' => "User is not found , Unauthorized"
+            ], 401);
+        }
     }
 }

@@ -192,7 +192,19 @@ class AuthController extends Controller
      */
     public function profile()
     {
-        return response()->json(auth()->user());
+
+        $headers = apache_request_headers();
+        $beartoken = $headers['Authorization'];
+        $actvtoken = auth()->user()->active_token;
+
+        if ($beartoken == "Bearer $actvtoken") {
+
+            return response()->json(auth()->user());
+        } else {
+            return response()->json([
+                'message' => "User is not found , Unauthorized"
+            ], 401);
+        }
     }
 
 
@@ -211,7 +223,7 @@ class AuthController extends Controller
         ]);
         auth()->logout();
         return response()->json([
-            'msg' => 'User Logout'
+            'message' => 'User Logout'
         ], 200);
     }
 

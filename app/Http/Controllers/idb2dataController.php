@@ -21,24 +21,34 @@ class idb2dataController extends Controller
      */
     public function index()
     {
+        $headers = apache_request_headers();
+        $beartoken = $headers['Authorization'];
+        $actvtoken = auth()->user()->active_token;
 
-        $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT STSHRT, STADD1, STADD2 ,STADD3 , STCITY , STZIP , STPHON FROM MM770QAL.TBLSTR');
+        if ($beartoken == "Bearer $actvtoken") {
+
+            $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT STSHRT, STADD1, STADD2 ,STADD3 , STCITY , STZIP , STPHON FROM MM770QAL.TBLSTR');
 
 
-        foreach ($qry as $item) {
-            // * $data is a Collection of ApiResources merged together per Page.
-            $item->stshrt = rtrim($item->stshrt);
-            $item->stadd1 = rtrim(mb_convert_encoding($item->stadd1, 'UTF-8', 'UTF-8'));
-            $item->stadd2 = rtrim(mb_convert_encoding($item->stadd2, 'UTF-8', 'UTF-8'));
-            $item->stadd3 = rtrim($item->stadd3);
-            $item->stcity = rtrim($item->stcity);
-            $item->stzip = rtrim($item->stzip);
-            $item->stphon = rtrim($item->stphon);
+            foreach ($qry as $item) {
+                // * $data is a Collection of ApiResources merged together per Page.
+                $item->stshrt = rtrim($item->stshrt);
+                $item->stadd1 = rtrim(mb_convert_encoding($item->stadd1, 'UTF-8', 'UTF-8'));
+                $item->stadd2 = rtrim(mb_convert_encoding($item->stadd2, 'UTF-8', 'UTF-8'));
+                $item->stadd3 = rtrim($item->stadd3);
+                $item->stcity = rtrim($item->stcity);
+                $item->stzip = rtrim($item->stzip);
+                $item->stphon = rtrim($item->stphon);
+            }
+
+            //  $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT POSTAT,PONOT1,POVNUM, PONUMB, POEDAT FROM MM770QAL.POMHDR');
+
+            return response()->json($qry);
+        } else {
+            return response()->json([
+                'message' => "User is not found , Unauthorized"
+            ], 401);
         }
-
-        //  $qry = DB::connection(env('DB2_CONNECTION'))->select('SELECT POSTAT,PONOT1,POVNUM, PONUMB, POEDAT FROM MM770QAL.POMHDR');
-
-        return response()->json($qry);
     }
 
 

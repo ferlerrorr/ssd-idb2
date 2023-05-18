@@ -69,8 +69,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/token-access', [App\Http\Controllers\AuthController::class, 'token']);
     Route::post('/reclaim', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('/verify/{email}', [App\Http\Controllers\AuthController::class, 'verify']);
-    // Route::get('/profile',[AuthController::class,'profile']);
-
+    Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile']);
 
     // ------------SSDController---------------
     // Route::get('/sdd/all-products', [App\Http\Controllers\ProductController::class, 'index']);
