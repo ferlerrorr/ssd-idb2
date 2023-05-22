@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rbac', function (Blueprint $table) {
             $table->id();
-            $table->string('rbac_list', 64)->unique;
+            $table->string('rbac_permission', 120);
             $table->timestamps();
         });
     }

@@ -83,10 +83,10 @@ class Response extends SymfonyResponse
     protected function shouldBeJson($content)
     {
         return $content instanceof Arrayable ||
-               $content instanceof Jsonable ||
-               $content instanceof ArrayObject ||
-               $content instanceof JsonSerializable ||
-               is_array($content);
+            $content instanceof Jsonable ||
+            $content instanceof ArrayObject ||
+            $content instanceof JsonSerializable ||
+            is_array($content);
     }
 
     /**

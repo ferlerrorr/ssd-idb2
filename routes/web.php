@@ -32,6 +32,10 @@ Route::get('/register', function () {
     return View::make('register/register');
 });
 
+Route::get('/reset-password', function () {
+    return View::make('reset-password/passreset');
+});
+
 
 Route::get('send-mail', function () {
 

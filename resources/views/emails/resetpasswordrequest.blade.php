@@ -11,13 +11,9 @@
             <h3 style="padding-top:20px; padding: bottom 15px;">Southstar API</h3>
 
 
-            <p>Please Click The link for SSD APi Verification, <a href="{{ env('API_HOST') }}{{ env('APP_PORT') }}/api/auth/verify/{{$email}}">click here</a>.</p>
+            <p>Please Click The link for SSD APi Password Change, <a href="{{ env('API_HOST') }}{{ env('APP_PORT') }}/api/ssd/password-change-verify/{{$email}}">click here</a>.</p>
 
-            <p>In case some of the content and links has been blocked.</p>
 
-            <p>Copy this link to any browser and your good to go . -> </p>
-              
-            <p>http://10.91.100.145:131/api/auth/verify/{{$email}}</p>
 
             <!-- <p>Happy mailing!</p>
 

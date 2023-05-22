@@ -60,10 +60,17 @@ Route::group(['middleware' => 'api', 'prefix' => 'admin'], function ($router) {
 });
 
 
+Route::get('/ssd/search-product/{pid}', 'App\Http\Controllers\AdminController@show');
 
 
 
-//!Need Auth JWT-Token
+
+
+//!User Password Reset/Change
+Route::get('/ssd/password-change-request/{email}', [App\Http\Controllers\AuthController::class, 'passwordChangeRequest']);
+Route::get('/ssd/password-change-verify/{email}', [App\Http\Controllers\AuthController::class, 'verifyPasswordChange']);
+
+//!User Manangement
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
     Route::post('/token-access', [App\Http\Controllers\AuthController::class, 'token']);
@@ -74,9 +81,19 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     // ------------SSDController---------------
     // Route::get('/sdd/all-products', [App\Http\Controllers\ProductController::class, 'index']);
 
-
     Route::get('/ssd/search-product/{pid}', 'App\Http\Controllers\ShopifyController@show');
     Route::get('/ssd/db2', 'App\Http\Controllers\idb2dataController@index');
     // ------------OrderController---------------
     // Route::post('/ssd/products/order', [App\Http\Controllers\OrderController::class, 'order']);
+});
+
+
+
+//!Admin Manangement
+Route::group(['middleware' => 'api', 'prefix' => 'admin'], function ($router) {
+    //Permissions
+    Route::get('/ssd/new-rbac-permissions/{permission}', 'App\Http\Controllers\AdminController@newPermission');
+    Route::get('/ssd/permissions-list', 'App\Http\Controllers\AdminController@permissions');
+    //Users
+    Route::get('/ssd/users-list', 'App\Http\Controllers\AdminController@GetAllUser');
 });

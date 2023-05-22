@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Tymon\JWTAuth\Providers\Auth\Illuminate;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['token', 'register', 'verify']]);
+        $this->middleware('auth:api', ['except' => ['token', 'register', 'verify', 'passwordChangeRequest', 'verifyPasswordChange']]);
     }
 
     /**
@@ -248,5 +248,72 @@ class AuthController extends Controller
         ]);
 
         return redirect('/token');
+    }
+
+    /**
+     * ! Password Reset Function.
+     * * Display the specific user details.
+     * @return \Illuminate\Http\Response
+     */
+    public function passwordChangeRequest($email)
+    {
+
+
+        $email = $email;
+        Mail::send('emails.resetpasswordrequest', ['email' => $email], function ($m) use ($email) {
+            $m->from('ssd.shopify.api@gmail.com', 'SouthStar API');
+            $m->to($email, 'admin')->subject('SSD API Password Change Request');
+        });
+
+        $email = $email;
+        $user = User::where('email', $email);
+
+
+        $user->update([
+            'email_verified_at' => null
+        ]);
+
+
+        return response()->json([
+            ['Password change request created'], ['Please Check Your Email For Verifiation']
+        ], 200);
+
+
+        //     # Validation
+        //     $request->validate([
+        //         'old_password' => 'required',
+        //         'new_password' => 'required|confirmed',
+        //     ]);
+
+
+        //     #Match The Old Password
+        //     if (!Hash::check($request->old_password, auth()->user()->password)) {
+        //         return back()->with("error", "Old Password Doesn't match!");
+        //     }
+
+
+        //     #Update the new Password
+        //     User::whereId(auth()->user()->id)->update([
+        //         'password' => Hash::make($request->new_password)
+        //     ]);
+
+        //     return back()->with("status", "Password changed successfully!");
+        // }
+
+    }
+
+    public function verifyPasswordChange($email)
+    {
+
+        $em = $email;
+        $time = Carbon::now();
+        $user = User::where('email', $em);
+
+        $user->update([
+            'email_verified_at' => $time
+        ]);
+
+        // //need emaile verified to reset passswod with password confirmation in the view
+        return redirect('/reset-password');
     }
 }
