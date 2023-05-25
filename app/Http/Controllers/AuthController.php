@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['token', 'register', 'verify', 'passwordChangeRequest', 'verifyPasswordChange']]);
+        $this->middleware('auth:api', ['except' => ['token', 'register', 'verify', 'passwordChangeRequest', 'verifyPasswordChange', 'passwordChange']]);
     }
 
     /**
@@ -277,29 +277,6 @@ class AuthController extends Controller
         return response()->json([
             ['Password change request created'], ['Please Check Your Email For Verifiation']
         ], 200);
-
-
-        //     # Validation
-        //     $request->validate([
-        //         'old_password' => 'required',
-        //         'new_password' => 'required|confirmed',
-        //     ]);
-
-
-        //     #Match The Old Password
-        //     if (!Hash::check($request->old_password, auth()->user()->password)) {
-        //         return back()->with("error", "Old Password Doesn't match!");
-        //     }
-
-
-        //     #Update the new Password
-        //     User::whereId(auth()->user()->id)->update([
-        //         'password' => Hash::make($request->new_password)
-        //     ]);
-
-        //     return back()->with("status", "Password changed successfully!");
-        // }
-
     }
 
     public function verifyPasswordChange($email)
@@ -315,5 +292,42 @@ class AuthController extends Controller
 
         // //need emaile verified to reset passswod with password confirmation in the view
         return redirect('/reset-password');
+    }
+
+
+
+    public function passwordChange(Request $request, $email)
+    {
+
+        //     # Validation
+        $validator = Validator::Make($request->all(), [
+            'password' => 'required|string|confirmed|min:6'
+        ]);
+
+        if ($validator->fails()) {
+
+            $invalid_fields = array_values($validator->errors()->toArray());
+
+            return response($invalid_fields, 400);
+        }
+
+
+        $password = $request->password;
+
+        //     #Match The Old Password
+        //     if (!Hash::check($request->old_password, auth()->user()->password)) {
+        //         return back()->with("error", "Old Password Doesn't match!");
+        //     }
+
+        #Update the new Password
+        User::where('email', $email)->update([
+            'password' => Hash::make($password)
+        ]);
+
+
+
+        return response()->json([
+            ['Password changed successfully']
+        ], 200);
     }
 }

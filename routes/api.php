@@ -69,7 +69,8 @@ Route::get('/ssd/search-product/{pid}', 'App\Http\Controllers\AdminController@sh
 //!User Password Reset/Change
 Route::get('/ssd/password-change-request/{email}', [App\Http\Controllers\AuthController::class, 'passwordChangeRequest']);
 Route::get('/ssd/password-change-verify/{email}', [App\Http\Controllers\AuthController::class, 'verifyPasswordChange']);
-
+// Route::post('/ssd/new-password/{email}', [App\Http\Controllers\AuthController::class, 'passwordChange']);
+Route::post('/ssd/new-password/{email}', 'App\Http\Controllers\AuthController@passwordChange');
 //!User Manangement
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
@@ -77,6 +78,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/reclaim', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('/verify/{email}', [App\Http\Controllers\AuthController::class, 'verify']);
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile']);
+
 
     // ------------SSDController---------------
     // Route::get('/sdd/all-products', [App\Http\Controllers\ProductController::class, 'index']);
