@@ -8,8 +8,10 @@ use App\Models\User;
 use Tymon\JWTAuth\Providers\Auth\Illuminate;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Contracts\Session\Session as SessionSession;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 
 class AuthController extends Controller
@@ -282,7 +284,7 @@ class AuthController extends Controller
     public function verifyPasswordChange($email)
     {
 
-        $em = $email;
+        $em = Str($email);
         $time = Carbon::now();
         $user = User::where('email', $em);
 
@@ -290,14 +292,18 @@ class AuthController extends Controller
             'email_verified_at' => $time
         ]);
 
+        // Session::put('ssd_api_email', $email);
+        $minutes = 60;
         // //need emaile verified to reset passswod with password confirmation in the view
-        return redirect('/reset-password');
+        $redir = "/reset-password";
+        return redirect($redir)->withCookie(cookie('ssd_api_email', $em, $minutes, null, null, false, false));
     }
 
 
 
     public function passwordChange(Request $request, $email)
     {
+
 
         //     # Validation
         $validator = Validator::Make($request->all(), [
@@ -314,20 +320,19 @@ class AuthController extends Controller
 
         $password = $request->password;
 
-        //     #Match The Old Password
-        //     if (!Hash::check($request->old_password, auth()->user()->password)) {
-        //         return back()->with("error", "Old Password Doesn't match!");
-        //     }
-
         #Update the new Password
-        User::where('email', $email)->update([
-            'password' => Hash::make($password)
+        $user =  User::where('email', $email)->update([
+            'password' => Hash::make($password),
+            'active_token' => null
+
         ]);
 
+        $user =  User::where('email', $email)->get();
 
 
         return response()->json([
-            ['Password changed successfully']
+            ['Password changed successfully.'],
+            ['Please re - generate your APi key for continuous usage of the service.'],
         ], 200);
     }
 }
