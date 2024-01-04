@@ -50,16 +50,15 @@ class Shopify
     use ManagesStoreProperties;
     use TransformsResources;
 
-    protected string $apiKey;
-    protected string $password;
+    protected string $accessToken;
     protected string $domain;
     protected string $apiVersion;
 
     protected ?PendingRequest $httpClient = null;
 
-    public function __construct(string $apiKey, string $password, string $domain, string $apiVersion)
+    public function __construct(string $accessToken, string $domain, string $apiVersion)
     {
-        $this->withCredentials($apiKey, $password, $domain, $apiVersion);
+        $this->withCredentials($accessToken, $domain, $apiVersion);
     }
 
     public function cursor(Collection $results): Cursor
@@ -70,13 +69,16 @@ class Shopify
     public function getHttpClient(): PendingRequest
     {
         return $this->httpClient ??= Http::baseUrl($this->getBaseUrl())
-            ->withBasicAuth($this->apiKey, $this->password);
+            ->withHeaders(['X-Shopify-Access-Token' => $this->accessToken]);
     }
 
     public function graphQl(): PendingRequest
     {
-        return Http::baseUrl("https://{$this->domain}/admin/api/graphql.json")
-            ->withHeaders(['X-Shopify-Access-Token' => $this->password]);
+        return Http::baseUrl("https://{$this->domain}/admin/api/{$this->apiVersion}/graphql.json")
+            ->withHeaders([
+                'X-Shopify-Access-Token' => $this->accessToken,
+                'Content-Type' => 'application/json',
+            ]);
     }
 
     public function getBaseUrl(): string
@@ -91,10 +93,9 @@ class Shopify
         return $this;
     }
 
-    public function withCredentials(string $apiKey, string $password, string $domain, string $apiVersion): self
+    public function withCredentials(string $accessToken, string $domain, string $apiVersion): self
     {
-        $this->apiKey = $apiKey;
-        $this->password = $password;
+        $this->accessToken = $accessToken;
         $this->domain = $domain;
         $this->apiVersion = $apiVersion;
 

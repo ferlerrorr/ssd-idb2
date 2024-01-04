@@ -69,6 +69,10 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'message' => "Resource not found"
                 ], 404);
+            } elseif ($exception->getMessage() == "Undefined array key \"Authorization\"") {
+                return response()->json([
+                    'message' => "User is not found , Unauthorized"
+                ], 401);
             } else {
 
                 return response()->json([

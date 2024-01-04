@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Mail;
 View::addExtension('html', 'blade');
 
 
-
 Route::get('/', function () {
     return View::make('home/home');
 });

@@ -26,6 +26,10 @@ use Illuminate\Support\Facades\Route;
 // _________________________________________________________________
 
 
+Route::get('/jda/all-generics', 'App\Http\Controllers\JdaController@genericName');
+
+
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -38,10 +42,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::get('product/search-products/{slug}', 'App\Http\Controllers\ProductController@show');
 
 // Route::get('product/search-products/{generic_name}/{product}', 'App\Http\Controllers\ProductController@search');
-
-// Route::get('product/all-generics', 'App\Http\Controllers\ProductController@generics');
-
-//!Must be Hidden/Admin Route 
+Route::get('product/all-generics', 'App\Http\Controllers\ProductController@generics');
+Route::get('/shopify/all-products', 'App\Http\Controllers\ShopifyController@index');
+//!Must be Hidden/Admin Route
 Route::group(['middleware' => 'api', 'prefix' => 'admin'], function ($router) {
 
     // Route::resource('/product/add-products', App\Http\Controllers\ProductController::class)->only([
@@ -49,14 +52,14 @@ Route::group(['middleware' => 'api', 'prefix' => 'admin'], function ($router) {
     // ]);
 
     // ------------ShofipyController----------------
-    Route::resource('/shopify/all-products', App\Http\Controllers\ShopifyController::class)->only([
-        'index'
-    ]);
+    // Route::get('/shopify/all-products', App\Http\Controllers\ShopifyController::class)->only([
+    //     'index'
+    // ]);
 
 
 
-    // ------------OrderController---------------
-    // Route::get('/ssd/orders', 'App\Http\Controllers\OrderController@index');
+    //  ------------OrderController---------------
+    Route::get('/ssd/orders', 'App\Http\Controllers\OrderController@index');
 });
 
 
@@ -78,8 +81,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('/reclaim', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('/verify/{email}', [App\Http\Controllers\AuthController::class, 'verify']);
     Route::get('/profile', [App\Http\Controllers\AuthController::class, 'profile']);
-
-
     // ------------SSDController---------------
     // Route::get('/sdd/all-products', [App\Http\Controllers\ProductController::class, 'index']);
 

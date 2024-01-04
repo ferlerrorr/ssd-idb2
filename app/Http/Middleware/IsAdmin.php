@@ -18,7 +18,7 @@ class IsAdmin
     public function handle(Request $request, Closure $next)
     {
         $admin = auth()->user()->permission;
-        if ($admin == "admin-dev") {
+        if ($admin == "adminUser") {
             return $next($request);
         } else {
 

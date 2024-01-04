@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Signifly\Shopify\Http\Middleware\ValidateWebhook;
 use Signifly\Shopify\Webhooks\Webhook;
 
@@ -27,6 +28,8 @@ class WebhookController extends Controller
 
             return new JsonResponse();
         } catch (Exception $e) {
+            Log::error($e->getMessage());
+
             return new Response('Error handling webhook', 500);
         }
     }
